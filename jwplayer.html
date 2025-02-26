@@ -6,6 +6,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KashurFlix jw</title>
   <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+  <style>
+    body {
+      background-color: black; /* Set background color to black */
+      margin: 0; /* Remove default margin */
+      display: flex; /* Use flexbox for centering */
+      flex-direction: column; /* Stack elements vertically */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      height: 100vh; /* Full viewport height */
+    }
+
+    #video {
+      width: 100%; /* Full width */
+      max-width: 800px; /* Maximum width for larger screens */
+      aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio */
+    }
+
+    .telegram-button {
+      background-color: #0074d9; /* Button background color */
+      color: #fff; /* Button text color */
+      border: none; /* Remove border */
+      padding: 10px 20px; /* Padding for the button */
+      cursor: pointer; /* Pointer cursor on hover */
+      margin-top: 20px; /* Space above the button */
+    }
+
+    .telegram-button:hover {
+      background-color: #005bb5; /* Darker blue on hover */
+    }
+  </style>
 </head>
 <body>
   <div id="video"></div>
@@ -18,22 +48,20 @@
     }
 
     jwplayer("video").setup({
-     image: "https://i.ibb.co/qFLHj2qM/ingx8.jpg",
-                width: "100%",
-                aspectratio: "16:9",
-                autostart: "false",
-                primary: "html5",
-                preload: "auto",
-                mute: "false",
+      image: "https://i.ibb.co/qFLHj2qM/ingx8.jpg",
+      width: "100%",
+      aspectratio: "16:9",
+      autostart: false,
+      primary: "html5",
+      preload: "auto",
+      mute: false,
       file: getVideoUrlFromDomain()
     });
+  </script>
 
-      </script>
-
-  <div style="background-color: #0074d9; text-align: center; padding: 10px;">
+  <div style="text-align: center;">
     <a href="https://t.me/+TP1EQM2kQg9mZTQ1" target="_blank">
-      <button id="joinTelegramButton" style="background-color: #fff; color: #0074d9; border: 2px solid #0074d9; padding: 5px 10px;">Join
-        Telegram</button>
+      <button class="telegram-button">Join Telegram</button>
     </a>
   </div>
 </body>
