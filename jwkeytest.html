@@ -1,35 +1,64 @@
-<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8">  <meta http-equiv="X-UA-Compatible" content="IE=edge">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>KashurFlix jw</title>  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>  <style>    body {      background-color: black; /* Set background color to black */      margin: 0; /* Remove default margin */      display: flex; /* Use flexbox for centering */      flex-direction: column; /* Stack elements vertically */      justify-content: center; /* Center horizontally */      align-items: center; /* Center vertically */      height: 100vh; /* Full viewport height */    }    #video {      width: 100%; /* Full width */      max-width: 800px; /* Maximum width for larger screens */      aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio */    }    .telegram-button {      background-color: #0074d9; /* Button background color */      color: #fff; /* Button text color */      border: none; /* Remove border */      padding: 10px 20px; /* Padding for the button */      cursor: pointer; /* Pointer cursor on hover */      margin-top: 20px; /* Space above the button */    }    .telegram-button:hover {      background-color: #005bb5; /* Darker blue on hover */    }  </style></head><body>  <div id="video"></div>  <script type="text/javascript">
-  // Function to get video URL from the domain
-  function getVideoUrlFromDomain() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const baseUrl = urlParams.get('url'); // Get the base URL
-    const drmScheme = urlParams.get('drmScheme'); // Get the DRM scheme
-    const drmLicense = urlParams.get('drmLicense'); // Get the DRM license
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KashurFlix jw</title>
+    <script src="//content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+    <style>
+        body {
+            margin: 0px;
+        }
 
-    // Check if the base URL is provided
-    if (!baseUrl) {
-      alert("No video URL provided!");
-      return ""; // Return an empty string or a default video URL
-    }
+        .jwplayer {
+            position: absolute !important;
+        }
 
-    // Construct the final video URL with DRM parameters
-    let finalUrl = baseUrl;
-    if (drmScheme && drmLicense) {
-      finalUrl += `?|drmScheme=${drmScheme}&drmLicense=${drmLicense}`;
-    }
+        .jwplayer.jw-flag-aspect-mode {
+            min-height: 100%;
+            max-height: 300%;
+        }
+    </style>
+</head>
+<body>
+    <div id="jwplayerDiv"></div>
 
-    return finalUrl;
-  }
+    <script type="text/javascript">
+        // Function to get video URL, key ID, and key from the URL parameters
+        function getVideoParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoUrl = urlParams.get('url'); // Get the video URL
+            const keyId = urlParams.get('keyId'); // Get the key ID
+            const key = urlParams.get('key'); // Get the key
 
-  jwplayer("video").setup({
-    image: "https://i.ibb.co/qFLHj2qM/ingx8.jpg",
-    width: "100%",
-    aspectratio: "16:9",
-    autostart: false,
-    primary: "html5",
-    preload: "auto",
-    mute: false,
-    file: getVideoUrlFromDomain()
-  });
-</script>
- <div style="text-align: center;">    <a href="https://t.me/+TP1EQM2kQg9mZTQ1" target="_blank">      <button class="telegram-button">Join Telegram</button>    </a>  </div></body></html>
+            // Check if the video URL is provided
+            if (!videoUrl || !keyId || !key) {
+                alert("Missing video URL, key ID, or key!");
+                return null; // Return null if any parameter is missing
+            }
+
+            return { videoUrl, keyId, key };
+        }
+
+        const params = getVideoParams();
+        if (params) {
+            jwplayer("jwplayerDiv").setup({
+                file: params.videoUrl,
+                position: 'bottom',
+                type: "dash",
+                drm: {
+                    "clearkey": {
+                        "keyId": params.keyId,
+                        "key": params.key
+                    }
+                },
+                logo: {
+                    "file": "",
+                    "link": "https://t.me/"
+                }
+            });
+        }
+    </script>
+</body>
+</html>
