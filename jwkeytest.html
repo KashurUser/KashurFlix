@@ -1,64 +1,197 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KashurFlix jw</title>
-    <script src="//content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+    <title>PAK VS NZ</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/9XGtny3q/IMG-20250221-222251-004.jpg">
     <style>
+        /* Basic reset for full-height player */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        /* Container for the JW Player */
+        #jwplayerDiv {
+            width: 100%;
+            height: 100%;
+        }
+        .jw-button-color {
+  color: white !important; /* The !important tag may be needed to override existing styles */
+}
+
+    </style>
+</head>
+<body>
+    <!-- JW Player container -->
+    <div id="jwplayerDiv"></div>
+    
+    <!-- JW Player script -->
+    <script src="https://content.jwplatform.com/libraries/Z79JsmAO.js"></script>
+    <!---DASH Setup-->
+    <script>
+        jwplayer("jwplayerDiv").setup({
+            file: "https://ottb.live.cf.ww.aiv-cdn.net/lhr-nitro/live/clients/dash/enc/wf8usag51e/out/v1/bd3b0c314fff4bb1ab4693358f3cd2d3/cenc.mpd",
+            drm: {
+                    clearkey: {
+                        keyId: "ae26845bd33038a9c0774a0981007294",
+                        key: "63ac662dde310cfb4cc6f9b43b34196d"
+                            }
+            },
+            width: "100%",
+            height: "96%",
+            controls: true,
+            displaytitle: true,
+            logo: {
+                file: '',
+                position: 'bottom-right'
+            },
+            playbackRateControls: true,
+            volumeControls: true,
+            sharing: {
+                links: [
+                    {
+                        title: 'Share on Facebook',
+                        link: 'https://www.facebook.com/sharer/sharer.php?u='
+                    },
+                    {
+                        title: 'Share on Twitter',
+                        link: 'https://twitter.com/intent/tweet?url='
+                    },
+                    {
+                        title: 'Share on LinkedIn',
+                        link: 'https://www.linkedin.com/shareArticle?mini=true&url='
+                    }
+                ]
+            },
+            abouttext: "",
+            aboutlink: "",
+            skin: {
+                active: '#FFFFFF',
+                inactive: '#FF0000'
+            },
+            autostart: true
+        });
+    </script>
+     
+     <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+     <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+     <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+     <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f31a11cffc8846bf95f1db2a2e162fa3"}'></script><!-- Cloudflare Pages Analytics --></body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page</title>
+    <style>
+        /* Basic styles */
         body {
-            margin: 0px;
+            background-color: #121212;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        .jwplayer {
-            position: absolute !important;
+        /* Scrolling text overlay */
+        .scrolling-text-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: red;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            border-radius: 15px 15px 0 0;
+            z-index: 1000;
         }
 
-        .jwplayer.jw-flag-aspect-mode {
-            min-height: 100%;
-            max-height: 300%;
+        .scrolling-text-container {
+            width: 99%;
+            overflow: hidden;
+        }
+        .scrolling-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scrollText 20s linear infinite;
+            color: black;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        @keyframes scrollText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Telegram button */
+        #telegram-button {
+            position: fixed;
+            bottom: 40px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #0088cc;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #telegram-button img {
+            width: 100%;
+            height: auto;
+            max-height: 100%;
+            object-fit: contain;
         }
     </style>
 </head>
 <body>
-    <div id="jwplayerDiv"></div>
 
-    <script type="text/javascript">
-        // Function to get video URL, key ID, and key from the URL parameters
-        function getVideoParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoUrl = urlParams.get('url'); // Get the video URL
-            const keyId = urlParams.get('keyId'); // Get the key ID
-            const key = urlParams.get('key'); // Get the key
+    <!-- Scrolling text overlay -->
+    <div class="scrolling-text-overlay">
+        <div class="scrolling-text-container">
+            <p class="scrolling-text">& SITE DEVELOPED BY KASHURFLIX, WE DON'T HAVE OWNERSHIP OF ANY CONTENT. ALL LINKS ARE FREELY AVAILABLE ON THE INTERNET </p>
+        </div>
+    </div>
 
-            // Check if the video URL is provided
-            if (!videoUrl || !keyId || !key) {
-                alert("Missing video URL, key ID, or key!");
-                return null; // Return null if any parameter is missing
+    <!-- Floating Telegram Button -->
+    <a href="https://t.me/kmricricker" target="_blank" id="telegram-button" aria-label="Join us on Telegram">
+        <img src="https://iili.io/JABLAjn.gif" alt="Join our Telegram Channel" />
+    </a>
+
+    <!-- Disable Developer Tools -->
+    <script disable-devtool-auto src="https://cdn.jsdelivr.net/npm/disable-devtool@latest"></script>
+
+    <!-- Telegram Confirmation Popup -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (confirm("Join Our Telegram Channel For Latest Update?")) {
+                window.open("https://t.me/kmricricker", '_blank');
             }
+        });
 
-            return { videoUrl, keyId, key };
-        }
+        // Hover effect for Telegram button
+        document.getElementById('telegram-button').addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.1)';
+        });
 
-        const params = getVideoParams();
-        if (params) {
-            jwplayer("jwplayerDiv").setup({
-                file: params.videoUrl,
-                position: 'bottom',
-                type: "dash",
-                drm: {
-                    "clearkey": {
-                        "keyId": params.keyId,
-                        "key": params.key
-                    }
-                },
-                logo: {
-                    "file": "",
-                    "link": "https://t.me/"
-                }
-            });
-        }
+        document.getElementById('telegram-button').addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+        });
     </script>
+
 </body>
 </html>
