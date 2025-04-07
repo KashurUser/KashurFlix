@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Matches</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+    }
+
+    .video-player {
+      width: 100%;
+      height: 400px;
+      display: none;
+      border: none;
+    }
+
+    .matches-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .match-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .match-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .match-card .details {
+      padding: 10px;
+    }
+
+    .match-card .details h4 {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .play-btn {
+      margin-top: 8px;
+      padding: 8px;
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    #popup {
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 999;
+    }
+
+    #popup button {
+      margin: 10px 5px 0 5px;
+      padding: 10px;
+      cursor: pointer;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 4px;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 998;
+    }
+  </style>
+</head>
+<body>
+
+<iframe id="player" class="video-player" allowfullscreen></iframe>
+
+<div class="matches-container" id="matchesContainer"></div>
+
+<div id="overlay"></div>
+<div id="popup">
+  <p>Choose Stream:</p>
+  <button id="normalPlay">KashurFlix URL 1</button>
+  <button id="adfreePlay">KashurFlix URL 2</button>
+</div>
+
+<script>
+const playerUrl = "https://kashurflix.netlify.app/shakaplyr.html?url=";
+const iframe = document.getElementById("player");
+const popup = document.getElementById("popup");
+const overlay = document.getElementById("overlay");
+let currentUrls = {};
+
+iframe.addEventListener("dblclick", () => {
+  if (iframe.requestFullscreen) {
+    iframe.requestFullscreen();
+  } else if (iframe.webkitRequestFullscreen) {
+    iframe.webkitRequestFullscreen();
+  } else if (iframe.msRequestFullscreen) {
+    iframe.msRequestFullscreen();
+  }
+});
+
+function showPopup(dai_url, adfree_url) {
+  currentUrls = { dai_url, adfree_url };
+  popup.style.display = "block";
+  overlay.style.display = "block";
+}
+
+function hidePopup() {
+  popup.style.display = "none";
+  overlay.style.display = "none";
+}
+
+document.getElementById("normalPlay").onclick = () => {
+  iframe.src = playerUrl + encodeURIComponent(currentUrls.dai_url);
+  iframe.style.display = "block";
+  hidePopup();
+};
+
+document.getElementById("adfreePlay").onclick = () => {
+  iframe.src = playerUrl + encodeURIComponent(currentUrls.adfree_url);
+  iframe.style.display = "block";
+  hidePopup();
+};
+
+function loadMatches() {
+  fetch("https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json")
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("matchesContainer");
+      data.matches.forEach(match => {
+        const card = document.createElement("div");
+        card.className = "match-card";
+        card.innerHTML = `
+          <img src="${match.src}" alt="${match.match_name}" />
+          <div class="details">
+            <h4>${match.match_name}</h4>
+            <h4>${match.startTime}</h4>
+            <button class="play-btn">Play</button>
+          </div>
+        `;
+        const btn = card.querySelector(".play-btn");
+        btn.onclick = () => {
+          if (match.dai_url && match.adfree_url) {
+            showPopup(match.dai_url, match.adfree_url);
+          } else if (match.dai_url) {
+            iframe.src = playerUrl + encodeURIComponent(match.dai_url);
+            iframe.style.display = "block";
+          } else if (match.adfree_url) {
+            iframe.src = playerUrl + encodeURIComponent(match.adfree_url);
+            iframe.style.display = "block";
+          } else {
+            alert("Stream not available");
+          }
+        };
+        container.appendChild(card);
+      });
+    });
+}
+
+loadMatches();
+</script>
+
+</body>
+</html>
