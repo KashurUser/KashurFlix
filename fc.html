@@ -3,188 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Live Matches</title>
+  <title>KashurFlix Live</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background: #111;
+      color: #fff;
     }
-
-    .video-player {
+    .player-frame {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 400px;
-      display: none;
+      height: 300px;
+      z-index: 1000;
       border: none;
     }
-
-    .matches-container {
+    .container {
+      margin-top: 310px;
+      padding: 10px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
     }
-
-    .match-card {
-      background: white;
-      border-radius: 8px;
+    .card {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+      backdrop-filter: blur(8px);
     }
-
-    .match-card img {
+    .card:hover {
+      transform: scale(1.03);
+    }
+    .card img {
       width: 100%;
-      height: 140px;
+      height: 180px;
       object-fit: cover;
     }
-
-    .match-card .details {
-      padding: 10px;
+    .card-content {
+      padding: 12px;
     }
-
-    .match-card .details h4 {
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+    .match-name {
+      color: #00bfff;
+      font-weight: bold;
+    }
+    .status {
+      color: #00ff00;
+      font-weight: bold;
+    }
+    .upcoming .status {
+      color: #ff9800;
+    }
+    .time {
+      color: #ffff00;
       margin: 5px 0;
-      font-size: 14px;
-      color: #333;
     }
-
     .play-btn {
-      margin-top: 8px;
+      background: #2196f3;
+      border: none;
+      color: white;
       padding: 8px;
-      background: #ff4d4d;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+      margin-top: 8px;
       width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
     }
 
-    #popup {
+    /* Popup */
+    .popup {
       position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
+      top: 0;
+      left: 0;
+      right:0;
+      bottom:0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .popup-content {
+      background: rgba(255, 255, 255, 0.1);
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      display: none;
-      z-index: 999;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
-
-    #popup button {
-      margin: 10px 5px 0 5px;
-      padding: 10px;
-      cursor: pointer;
+    .popup-content button {
+      margin: 10px;
+      padding: 10px 20px;
       border: none;
-      background: #007bff;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
       color: white;
-      border-radius: 4px;
     }
-
-    #overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.4);
-      display: none;
-      z-index: 998;
+    .normal {
+      background-color: #009688;
+    }
+    .adfree {
+      background-color: #673ab7;
     }
   </style>
 </head>
 <body>
+  <iframe id="player" class="player-frame" src="" allowfullscreen></iframe>
+  <div class="container" id="matches"></div>
 
-<iframe id="player" class="video-player" allowfullscreen></iframe>
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h3>Choose Stream</h3>
+      <button class="normal" onclick="playStream(selectedUrls.dai)">Play Normal</button>
+      <button class="adfree" onclick="playStream(selectedUrls.adfree)">Play Adfree</button>
+    </div>
+  </div>
 
-<div class="matches-container" id="matchesContainer"></div>
+  <script>
+    const matchContainer = document.getElementById('matches');
+    const popup = document.getElementById('popup');
+    let selectedUrls = {};
 
-<div id="overlay"></div>
-<div id="popup">
-  <p>Choose Stream:</p>
-  <button id="normalPlay">KashurFlix URL 1</button>
-  <button id="adfreePlay">KashurFlix URL 2</button>
-</div>
+    const jsonUrl = "https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json";
+    const playerBase = "https://kashurflix.netlify.app/shakaplyr.html?url=";
 
-<script>
-const playerUrl = "https://kashurflix.netlify.app/shakaplyr.html?url=";
-const iframe = document.getElementById("player");
-const popup = document.getElementById("popup");
-const overlay = document.getElementById("overlay");
-let currentUrls = {};
-
-iframe.addEventListener("dblclick", () => {
-  if (iframe.requestFullscreen) {
-    iframe.requestFullscreen();
-  } else if (iframe.webkitRequestFullscreen) {
-    iframe.webkitRequestFullscreen();
-  } else if (iframe.msRequestFullscreen) {
-    iframe.msRequestFullscreen();
-  }
-});
-
-function showPopup(dai_url, adfree_url) {
-  currentUrls = { dai_url, adfree_url };
-  popup.style.display = "block";
-  overlay.style.display = "block";
-}
-
-function hidePopup() {
-  popup.style.display = "none";
-  overlay.style.display = "none";
-}
-
-document.getElementById("normalPlay").onclick = () => {
-  iframe.src = playerUrl + encodeURIComponent(currentUrls.dai_url);
-  iframe.style.display = "block";
-  hidePopup();
-};
-
-document.getElementById("adfreePlay").onclick = () => {
-  iframe.src = playerUrl + encodeURIComponent(currentUrls.adfree_url);
-  iframe.style.display = "block";
-  hidePopup();
-};
-
-function loadMatches() {
-  fetch("https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json")
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("matchesContainer");
-      data.matches.forEach(match => {
-        const card = document.createElement("div");
-        card.className = "match-card";
-        card.innerHTML = `
-          <img src="${match.src}" alt="${match.match_name}" />
-          <div class="details">
-            <h4>${match.match_name}</h4>
-            <h4>${match.startTime}</h4>
-            <button class="play-btn">Play</button>
-          </div>
-        `;
-        const btn = card.querySelector(".play-btn");
-        btn.onclick = () => {
-          if (match.dai_url && match.adfree_url) {
-            showPopup(match.dai_url, match.adfree_url);
-          } else if (match.dai_url) {
-            iframe.src = playerUrl + encodeURIComponent(match.dai_url);
-            iframe.style.display = "block";
-          } else if (match.adfree_url) {
-            iframe.src = playerUrl + encodeURIComponent(match.adfree_url);
-            iframe.style.display = "block";
-          } else {
-            alert("Stream not available");
-          }
-        };
-        container.appendChild(card);
+    fetch(jsonUrl)
+      .then(res => res.json())
+      .then(data => {
+        data.matches.forEach(match => {
+          const card = document.createElement('div');
+          card.className = `card ${match.status !== 'LIVE' ? 'upcoming' : ''}`;
+          card.innerHTML = `
+            <img src="${match.src}" alt="${match.match_name}" />
+            <div class="card-content">
+              <div class="title">${match.title}</div>
+              <div class="match-name">${match.match_name}</div>
+              <div class="status">${match.status}</div>
+              <div class="time">${match.startTime}</div>
+              <button class="play-btn">Play</button>
+            </div>
+          `;
+          const btn = card.querySelector('.play-btn');
+          btn.addEventListener('click', () => {
+            if (match.dai_url && match.adfree_url) {
+              selectedUrls = { dai: match.dai_url, adfree: match.adfree_url };
+              popup.style.display = 'flex';
+            } else if (match.dai_url) {
+              playStream(match.dai_url);
+            } else if (match.adfree_url) {
+              playStream(match.adfree_url);
+            } else {
+              alert("Stream not available. Wait for match to start - KashurFlix");
+            }
+          });
+          matchContainer.appendChild(card);
+        });
       });
+
+    function playStream(url) {
+      document.getElementById('player').src = playerBase + encodeURIComponent(url);
+      popup.style.display = 'none';
+    }
+
+    // Close popup on outside click
+    popup.addEventListener('click', (e) => {
+      if (e.target.id === 'popup') popup.style.display = 'none';
     });
-}
-
-loadMatches();
-</script>
-
+  </script>
 </body>
 </html>
