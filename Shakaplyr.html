@@ -100,7 +100,13 @@
 
         player.configure({
           streaming: {
-            bufferingGoal: 30 // 30 second buffer preload
+            bufferingGoal: 30, // 30 second buffer preload
+            retryParameters: {
+              maxAttempts: 3, // Retry up to 3 times
+              baseDelay: 1, // Start retry delay at 1 second
+              backoffFactor: 2 // Double the delay for each retry
+            },
+            lowLatencyMode: true, // Enable low latency mode
           }
         });
 
