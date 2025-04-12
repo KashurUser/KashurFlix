@@ -7,6 +7,7 @@
   <link rel="shortcut icon" href="https://i.ibb.co/1pYGvdp/klogo.jpg" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/shaka-player.ui.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/controls.min.css" />
+  
   <style>
     body {
       margin: 0;
@@ -72,12 +73,10 @@
       const video = document.getElementById('video');
       const videoContainer = document.getElementById('video-container');
       const noUrlMessage = document.getElementById('no-url-message');
-      
-      // Get the 'url' query parameter from the URL
       const manifestUri = getQueryParam('url');
 
       if (!manifestUri) {
-        noUrlMessage.style.display = 'block'; // Show message if URL is missing
+        noUrlMessage.style.display = 'block';
         return;
       }
 
@@ -100,29 +99,18 @@
 
         player.configure({
           streaming: {
-            bufferingGoal: 30, // 30 second buffer preload
-            retryParameters: {
-              maxAttempts: 3, // Retry up to 3 times
-              baseDelay: 1, // Start retry delay at 1 second
-              backoffFactor: 2 // Double the delay for each retry
-            },
-            lowLatencyMode: true, // Enable low latency mode
+            bufferingGoal: 30 // 30 second buffer preload
           }
         });
 
-        video.addEventListener('play', () => {
-          console.log("Playback started");
-        });
-
         try {
-          // Attempt to load the m3u8 stream
-          await player.load(manifestUri);
+          await player.load(manifestUri); // Directly load m3u8 stream URL
           console.log('Video loaded successfully');
-          noUrlMessage.style.display = 'none'; // Hide message once video starts loading
-          videoContainer.style.display = 'block'; // Show video container
+          noUrlMessage.style.display = 'none';
+          videoContainer.style.display = 'block';
         } catch (error) {
           console.error('Error loading video: ', error);
-          noUrlMessage.style.display = 'block'; // Show message if there is an error loading the video
+          noUrlMessage.style.display = 'block';
         }
       } else {
         console.error('Shaka Player not supported');
@@ -131,10 +119,9 @@
 
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name); // Return the value of the URL parameter 'name'
+      return urlParams.get(name);
     }
 
-    // Call initPlayer once the DOM content is loaded
     document.addEventListener('DOMContentLoaded', initPlayer);
   </script>
 </body>
