@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KashurFlix jw</title>
+  <title>Web player</title>
   <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
   <style>
     body {
@@ -48,7 +48,7 @@
     }
 
     jwplayer("video").setup({
-      image: "https://i.ibb.co/qFLHj2qM/ingx8.jpg",
+      image: "https://cdn.dribbble.com/userupload/23628588/file/original-1f54f44587d2851f4c5b49446b3e3572.gif",
       width: "100%",
       aspectratio: "16:9",
       autostart: false,
@@ -59,10 +59,12 @@
     });
   </script>
 
-  <div style="text-align: center;">
-    <a href="https://t.me/+TP1EQM2kQg9mZTQ1" target="_blank">
-      <button class="telegram-button">Join Telegram</button>
-    </a>
-  </div>
-</body>
-</html>
+  <script>
+    const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
+    let visitCount = localStorage.getItem('visitCount') || 0;
+    visitCount = parseInt(visitCount) + 1;
+    localStorage.setItem('visitCount', visitCount);
+    if (visitCount % 11 === 0) {
+      window.location.href = telegramLink;
+    }
+  </script>
