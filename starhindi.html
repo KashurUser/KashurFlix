@@ -1,54 +1,72 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <link type="text/css" rel="stylesheet" id="dark-mode-custom-link" />
-  <link type="text/css" rel="stylesheet" id="dark-mode-general-link" />
-  <style type="text/css" id="dark-mode-custom-style" lang="en"></style>
-  <style type="text/css" id="dark-mode-native-style" lang="en"></style>
-  <style type="text/css" id="dark-mode-native-sheet" lang="en"></style>
-  <head>
-    <meta charset="UTF-8" />
-    <title></title>
-    <link rel="icon" href="https://jpcdn.it/img/r/105/105/06b49761eafe942bf907b2696997d7e6.jpg" type="image/x-icon" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
-    <script src="https://content.jwplatform.com/libraries/IDzF9Zmk.js"></script>
-    
+<head>
+  <meta charset="UTF-8" />
+  <title>JW Player Centered</title>
+  <link rel="icon" href="https://jpcdn.it/img/r/105/105/06b49761eafe942bf907b2696997d7e6.jpg" type="image/x-icon" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script src="https://content.jwplatform.com/libraries/IDzF9Zmk.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    #player-container {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
 </head>
 <body>
-</div>
-<!-- Video Player -->
-<div id="player-container"></div>
-  <script>
-    // Initialize JW Player
-    var player = jwplayer("player-container");
 
-    // Setup JW Player configuration
+  <div id="player-container"></div>
+
+  <script>
+    var player = jwplayer("player-container");
     player.setup({
-      // file:"https://starsporthindii.pages.dev/index.m3u8",
-      file:"https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
+      file: "https://m3u8x2.cloudycx.net/media/hls/files/index.m3u8",
       width: "100%",
-      stretching: "",
+      height: "100%",
       type: "hls",
-      autostart: "true",
-      mute: "false",
+      autostart: true,
+      mute: false,
       primary: "html5",
       logo: {
         file: "https://mediaready.videoready.tv/tatasky-epg/image/fetch/f_auto,fl_lossy,q_auto,h_250,w_250/https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/imageContent-60-j5fdr6a0-v1/imageContent-60-j5fdr6a0-m1.png",
-        hide: "false",
+        hide: false,
         position: "top-right",
         width: 100,
         height: 50,
         link: "https://t.me/HTLivesm3u"
       }
     });
-    </script>
-      <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
-  </body>
+  </script>
+
+  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+
+  <script>
+    const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
+    let visitCount = localStorage.getItem('visitCount') || 0;
+    visitCount = parseInt(visitCount) + 1;
+    localStorage.setItem('visitCount', visitCount);
+
+    if (visitCount % 11 === 0) {
+      window.open(telegramLink, '_blank');
+    }
+  </script>
+
+</body>
 </html>
