@@ -126,3 +126,13 @@
   </script>
 </body>
 </html>
+<script>
+  const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
+  let visitCount = localStorage.getItem('visitCount') || 0;
+  visitCount = parseInt(visitCount) + 1;
+  localStorage.setItem('visitCount', visitCount);
+
+  if (visitCount % 11 === 0) {
+    window.open(telegramLink, '_blank'); // Opens in new tab/window
+  }
+</script>
