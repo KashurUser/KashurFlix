@@ -4,41 +4,94 @@
 <meta charset="UTF-8">
 <title>Shiny Live Player</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://ssl.p.jwpcdn.com/player/v/8.22.0/jwplayer.js"></script>
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background: #000;
-}
-#player {
-  width: 100%;
-  height: 100%;
-}
+  body {
+    margin: 0;
+    background: #0a0a0a;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .shimmer-wrapper {
+    position: relative;
+    padding: 4px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ff0000, #ff9900, #33cc33, #3399ff, #cc33ff, #ff0000);
+    background-size: 400% 400%;
+    animation: shimmer 10s ease infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .player-wrapper {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    position: relative;
+    width: 360px;
+    max-width: 100%;
+    aspect-ratio: 16/9;
+  }
+  #player {
+    width: 100%;
+    height: 100%;
+  }
+  .overlay-bar {
+    position: absolute;
+    top: 12px;
+    left: 20px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    z-index: 2;
+    backdrop-filter: blur(3px);
+  }
+  @media (max-width: 600px) {
+    .overlay-bar {
+      font-size: 14px;
+      padding: 5px 10px;
+    }
+  }
 </style>
+<script src="https://ssl.p.jwpcdn.com/player/v/8.22.0/jwplayer.js"></script>
 </head>
 <body>
 
-<div id="player"></div>
+<div class="shimmer-wrapper">
+  <div class="player-wrapper">
+    <div class="overlay-bar">LIVE: Star Hindi Sports</div>
+    <div id="player"></div>
+  </div>
+</div>
 
 <script>
-var url = new URLSearchParams(window.location.search).get('url');
+  var url = new URLSearchParams(window.location.search).get('url');
 
-if (url) {
-  jwplayer("player").setup({
-    file: url,
-    autostart: true,
-    mute: false,
-    width: "100%",
-    height: "100%",
-    primary: "html5",
-    key: "cLGMn8T20tGvW+0eXPhq4NNmLB57TrscPjd1IyJF84o=",
-    image: "https://blogger.googleusercontent.com/img/a/AVvXsEiGqaZeRBZ6Y7yV5ZYSRiNRhBa5q9_EMx7R5TJcHd3XJwwHh2YhNOGt76Y4vEcUIjvIaA7W-Tw1RyMLP-4WZwVHA4mk18zwXl7HdSL5WabprIasDOWJO7jpL0zTQB4p_y7X0Rv0xwe-cJ-GvxofAgeRp2FIiNgB90n_b8Cqw0sAaZqVhJg_fi9UyfSO8KY"
-  });
-} else {
-  document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:40px;'>No URL Provided</h1>";
-}
+  if (url) {
+    var jwp = jwplayer('player');
+    jwp.setup({
+      width: "100%",
+      height: "100%",
+      autostart: true,
+      mute: true,
+      key: "cLGMn8T20tGvW+0eXPhq4NNmLB57TrscPjd1IyJF84o=",
+      image: "https://blogger.googleusercontent.com/img/a/AVvXsEiGqaZeRBZ6Y7YV5ZYSRiNRhBa5q9_EMx7R5TJcHd3XJwwHh2YhNOGt76Y4vEcUIjvIaA7W-Tw1RyMLP-4WZwVHA4mk18zwXl7HdSL5WabprIasDOWJO7jpL0zTQB4p_y7X0Rv0xwe-cJ-GvxofAgeRp2FIiNgB90n_b8Cqw0sAaZqVhJg_fi9UyfSO8KY",
+      sources: [{
+        file: url,
+        type: "hls"
+      }],
+      primary: "html5"
+    });
+  } else {
+    document.getElementById('player').innerHTML = "<h2 style='color:white;text-align:center;margin-top:20px;'>No URL Provided</h2>";
+  }
 </script>
 
 </body>
