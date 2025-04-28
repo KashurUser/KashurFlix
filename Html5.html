@@ -72,15 +72,13 @@
 </div>
 
 <script>
-  // Function to get URL parameter
-  function getURLParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(location.search);
-    return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  // Safe URL parameter parser
+  function getURLParameter() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('url');
   }
 
-  var videoURL = getURLParameter('url');
+  var videoURL = getURLParameter();
 
   if (videoURL) {
     var jwp = jwplayer('player');
