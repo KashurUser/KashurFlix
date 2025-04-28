@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Live Player</title>
+<title>Shiny Live Player</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://ssl.p.jwpcdn.com/player/v/8.22.0/jwplayer.js"></script>
 <style>
@@ -11,9 +11,6 @@ html, body {
   padding: 0;
   height: 100%;
   background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 #player {
   width: 100%;
@@ -26,17 +23,11 @@ html, body {
 <div id="player"></div>
 
 <script>
-// Direct URL read kare bina encode kiye
-function getURL() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('url');
-}
+var url = new URLSearchParams(window.location.search).get('url');
 
-var streamURL = getURL();
-
-if (streamURL) {
+if (url) {
   jwplayer("player").setup({
-    file: streamURL,
+    file: url,
     autostart: true,
     mute: false,
     width: "100%",
@@ -46,7 +37,7 @@ if (streamURL) {
     image: "https://blogger.googleusercontent.com/img/a/AVvXsEiGqaZeRBZ6Y7yV5ZYSRiNRhBa5q9_EMx7R5TJcHd3XJwwHh2YhNOGt76Y4vEcUIjvIaA7W-Tw1RyMLP-4WZwVHA4mk18zwXl7HdSL5WabprIasDOWJO7jpL0zTQB4p_y7X0Rv0xwe-cJ-GvxofAgeRp2FIiNgB90n_b8Cqw0sAaZqVhJg_fi9UyfSO8KY"
   });
 } else {
-  document.body.innerHTML = "<h2 style='color:white;text-align:center;'>No Stream URL Provided</h2>";
+  document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:40px;'>No URL Provided</h1>";
 }
 </script>
 
