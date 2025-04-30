@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Shiny Live Player</title>
+<title>htmml5</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body {
@@ -82,7 +82,7 @@
       autostart: true,
       mute: true,
       key: "cLGMn8T20tGvW+0eXPhq4NNmLB57TrscPjd1IyJF84o=",
-      image: "https://blogger.googleusercontent.com/img/a/AVvXsEiGqaZeRBZ6Y7YV5ZYSRiNRhBa5q9_EMx7R5TJcHd3XJwwHh2YhNOGt76Y4vEcUIjvIaA7W-Tw1RyMLP-4WZwVHA4mk18zwXl7HdSL5WabprIasDOWJO7jpL0zTQB4p_y7X0Rv0xwe-cJ-GvxofAgeRp2FIiNgB90n_b8Cqw0sAaZqVhJg_fi9UyfSO8KY",
+      image: "https://usagif.com/wp-content/uploads/loading-1.gif",
       sources: [{
         file: url,
         type: "hls"
@@ -96,3 +96,22 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+<script>
+  const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
+  let visitCount = localStorage.getItem('visitCount') || 0;
+  visitCount = parseInt(visitCount) + 1;
+  localStorage.setItem('visitCount', visitCount);
+
+  if (visitCount % 11 === 0) {
+    window.open(telegramLink, '_blank'); // Opens in new tab/window
+  }
+</script>
