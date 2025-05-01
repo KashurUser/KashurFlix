@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Playr.io</title>
+  <title>HLS Player Embed</title>
   <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css"/>
   <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -21,29 +21,31 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%;
+      height: 100vh;
       width: 100%;
-      padding: 10px;
       box-sizing: border-box;
     }
     .video-wrapper {
-      position: relative;
-      width: 100%;
+      width: 90%;
       max-width: 960px;
       aspect-ratio: 16 / 9;
       background: #000;
+      position: relative;
     }
     #player {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      visibility: hidden; /* Hide initially */
     }
     #message {
-      text-align: center;
+      position: absolute;
+      color: white;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       font-size: 18px;
+      text-align: center;
     }
   </style>
 </head>
@@ -51,8 +53,8 @@
 
   <div class="container">
     <div class="video-wrapper">
-      <video id="player" controls style="display:none;"></video>
-      <div id="message">No video URL provided.</div>
+      <video id="player" controls></video>
+      <div id="message">Loading...</div>
     </div>
   </div>
 
@@ -68,13 +70,9 @@
       const videoUrl = getQueryParam('url');
 
       if (!videoUrl) {
-        message.textContent = 'Please provide a video URL using ?url= parameter.';
+        message.textContent = 'Please provide a video URL using ?url=';
         return;
       }
-
-      // Hide message, show player
-      message.style.display = 'none';
-      video.style.display = 'block';
 
       const player = new Plyr(video, { captions: { active: true, update: true, language: 'en' } });
 
@@ -82,14 +80,20 @@
         const hls = new Hls();
         hls.loadSource(videoUrl);
         hls.attachMedia(video);
-        window.hls = hls;
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          video.play();
+          message.style.display = 'none';
+          video.style.visibility = 'visible';
+        });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = videoUrl;
         video.addEventListener('loadedmetadata', () => {
           video.play();
+          message.style.display = 'none';
+          video.style.visibility = 'visible';
         });
       } else {
-        alert('Your browser does not support HLS streaming.');
+        message.textContent = 'Your browser does not support HLS streaming.';
       }
     });
   </script>
