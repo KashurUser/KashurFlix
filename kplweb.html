@@ -1,205 +1,114 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-  <meta charset="UTF-8" />
-
-  <title>KashurFlix Player</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta charset="UTF-8">
+  <title>Live TV Player</title>
   <style>
-
     body {
-
       margin: 0;
-
       font-family: sans-serif;
+      background: #000;
+      color: white;
+    }
 
-      background: #0f1115;
-
-      color: #fff;
-
+    .player-container {
+      width: 100%;
+      height: 300px;
+      background: black;
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
 
     iframe {
-
       width: 100%;
-
-      height: 300px;
-
+      height: 100%;
       border: none;
-
-      display: block;
-
-      background: #000;
-
     }
 
-    .channel-grid {
-
+    .channels {
       display: grid;
-
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-
-      gap: 12px;
-
-      padding: 20px;
-
-    }
-
-    .card {
-
-      background: rgba(255, 255, 255, 0.05);
-
-      border: 1px solid rgba(255, 255, 255, 0.1);
-
-      border-radius: 10px;
-
+      gap: 10px;
       padding: 10px;
+    }
 
+    .channel {
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
       text-align: center;
-
-      transition: all 0.3s ease;
-
-      backdrop-filter: blur(8px);
-
       cursor: pointer;
-
-      color: #ccc;
-
+      transition: 0.3s;
+      box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
     }
 
-    .card:hover {
-
+    .channel:hover {
+      background: #222;
       transform: scale(1.03);
-
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
-
-      background: rgba(255, 255, 255, 0.08);
-
-      color: #fff;
-
     }
 
-    .card img {
-
+    .channel img {
       width: 100%;
-
       height: 80px;
-
       object-fit: contain;
-
-      margin-bottom: 10px;
-
+      margin-bottom: 5px;
     }
-
-    .title {
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-      text-transform: uppercase;
-
-    }
-
   </style>
-
 </head>
-
 <body>
 
-  <!-- Video Iframe -->
-
-  <iframe id="player" src="https://kashurflix.netlify.app/jwplayer.html?url=https://live-proxy.vercel.app/cors?url=https://oriby-streaming-proxy.sultanarabi161.workers.dev/https://rips.in/stream/ch4/use-embed-plz.m3u8" allowfullscreen></iframe>
-
-  <!-- Channel Cards -->
-
-  <div class="channel-grid">
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link1.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShi-_2VNzue6KELNbHme5VM8-M6126g5tVQ1uf9Plm0wACamlIQ736Hw0x&s=10" alt="Star Sports 1">
-
-      <div class="title">Star Sports 1</div>
-
-    </a>
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link2.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQitZhQ3XWmgRosv11OqGANB5Csag_WXEts_A&s" alt="Star Sports Hindi">
-
-      <div class="title">Star Sports 1 Hindi</div>
-
-    </a>
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link3.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNdWgfjRbDcEhebKhNWS0-RL4TkRPOANLWxQ&s" alt="Sky Sports Cricket">
-
-      <div class="title">Sky Sports Cricket</div>
-
-    </a>
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link4.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvucadtFUMdzC6kScN2PodG-GJXrlPdNDh8Q&s" alt="Willow TV">
-
-      <div class="title">Willow TV</div>
-
-    </a>
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link5.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsklugwzMOLPypetTgyEmSbspxLagL-FitUg&s" alt="Astro Cricket">
-
-      <div class="title">Astro Cricket</div>
-
-    </a>
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link6.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTBd-JdYY5gYNwn9oE2KZjwisic_hTki2XXMGimmRLAc20p1vWPKvqvF7Q&s=10" alt="T Sports">
-
-      <div class="title">T Sports</div>
-
-    </a>
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link7.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSa3eZ5KK7a6um-fpZkl4ICopVlBDb_P9am8ASptYYneFn_PUEikXGmUH4&s=10" alt="PTV Sports">
-
-      <div class="title">PTV Sports</div>
-
-    </a>
-
-    <a class="card" href="javascript:void(0)" onclick="playStream('https://link8.m3u8')">
-
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS8b0GP1SR9v1wl67axZLhd5pGbwht1pSKlA&s" alt="A Sports">
-
-      <div class="title">A Sports</div>
-
-    </a>
-
+  <div class="player-container">
+    <iframe id="player" allowfullscreen></iframe>
   </div>
 
-  <!-- Script to change iframe src -->
+  <div class="channels">
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://live-proxy.vercel.app/cors?url=https://oriby-streaming-proxy.sultanarabi161.workers.dev/https://www.tbn24.com/api/video/4028_0.m3u8')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShi-_2VNzue6KELNbHme5VM8-M6126g5tVQ1uf9Plm0wACamlIQ736Hw0x&s=10" alt="Star Sports 1">
+      STAR SPORTS 1
+    </div>
+
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/willow.m3u8')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlQeXeEiwhVpoXvnntFDZ4EUi9ciZjP4xzIw&s" alt="Willow">
+      WILLOW TV
+    </div>
+
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/skysports.m3u8')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqR8M8ihSv4wVnZSoRiqRYzqYJwneVE8NIvQ&s" alt="Sky Sports Cricket">
+      SKY SPORTS CRICKET
+    </div>
+
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/astro.m3u8')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsklugwzMOLPypetTgyEmSbspxLagL-FitUg&s" alt="Astro Cricket">
+      ASTRO CRICKET
+    </div>
+
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/tsports.m3u8')">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/T_Sports_logo.svg/1200px-T_Sports_logo.svg.png" alt="T Sports">
+      T SPORTS
+    </div>
+
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/ptvsports.m3u8')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxftj7E-cjezduzYotuqzKjjLpQDE3HCY2LA&s" alt="PTV Sports">
+      PTV SPORTS
+    </div>
+
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/asports.m3u8')">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS8b0GP1SR9v1wl67axZLhd5pGbwht1pSKlA&s" alt="A Sports">
+      A SPORTS
+    </div>
+
+    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/starhindi.m3u8')">
+      <img src="https://5.imimg.com/data5/SELLER/Default/2024/7/432813201/YT/VH/RF/184162459/star-sports-1-hindi.webp" alt="Star Sports Hindi">
+      STAR SPORTS 1 HINDI
+    </div>
+  </div>
 
   <script>
-
-    function playStream(m3u8url) {
-
-      const encoded = encodeURIComponent(m3u8url);
-
-      document.getElementById("player").src = https://kashurflix.netlify.app/jwplayer.html?url=${encoded};
-
+    function play(url) {
+      document.getElementById('player').src = url;
     }
-
   </script>
 
 </body>
-
-      </html>
+</html>
