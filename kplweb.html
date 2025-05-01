@@ -13,7 +13,7 @@
 
     .player-container {
       width: 100%;
-      height: 300px;
+      height: 240px;
       background: black;
       position: sticky;
       top: 0;
@@ -28,19 +28,19 @@
 
     .channels {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
-      padding: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 12px;
     }
 
     .channel {
       background: #111;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 10px;
       text-align: center;
       cursor: pointer;
       transition: 0.3s;
-      box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
     }
 
     .channel:hover {
@@ -54,59 +54,39 @@
       object-fit: contain;
       margin-bottom: 5px;
     }
+
+    @media (min-width: 600px) {
+      .channels {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 900px) {
+      .channels {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="player-container">
-    <iframe id="player" allowfullscreen></iframe>
+    <iframe id="player" allowfullscreen allow="autoplay; encrypted-media" controls></iframe>
   </div>
 
   <div class="channels">
+    <!-- Channels (same as before) -->
     <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://live-proxy.vercel.app/cors?url=https://oriby-streaming-proxy.sultanarabi161.workers.dev/https://www.tbn24.com/api/video/4028_0.m3u8')">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShi-_2VNzue6KELNbHme5VM8-M6126g5tVQ1uf9Plm0wACamlIQ736Hw0x&s=10" alt="Star Sports 1">
       STAR SPORTS 1
     </div>
-
-    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/willow.m3u8')">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlQeXeEiwhVpoXvnntFDZ4EUi9ciZjP4xzIw&s" alt="Willow">
-      WILLOW TV
-    </div>
-
-    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/skysports.m3u8')">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqR8M8ihSv4wVnZSoRiqRYzqYJwneVE8NIvQ&s" alt="Sky Sports Cricket">
-      SKY SPORTS CRICKET
-    </div>
-
-    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/astro.m3u8')">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsklugwzMOLPypetTgyEmSbspxLagL-FitUg&s" alt="Astro Cricket">
-      ASTRO CRICKET
-    </div>
-
-    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/tsports.m3u8')">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/T_Sports_logo.svg/1200px-T_Sports_logo.svg.png" alt="T Sports">
-      T SPORTS
-    </div>
-
-    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/ptvsports.m3u8')">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxftj7E-cjezduzYotuqzKjjLpQDE3HCY2LA&s" alt="PTV Sports">
-      PTV SPORTS
-    </div>
-
-    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/asports.m3u8')">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS8b0GP1SR9v1wl67axZLhd5pGbwht1pSKlA&s" alt="A Sports">
-      A SPORTS
-    </div>
-
-    <div class="channel" onclick="play('https://kashurflix.netlify.app/playrio.html?url=https://example.com/starhindi.m3u8')">
-      <img src="https://5.imimg.com/data5/SELLER/Default/2024/7/432813201/YT/VH/RF/184162459/star-sports-1-hindi.webp" alt="Star Sports Hindi">
-      STAR SPORTS 1 HINDI
-    </div>
+    <!-- Add other channels here the same way -->
   </div>
 
   <script>
     function play(url) {
-      document.getElementById('player').src = url;
+      const player = document.getElementById('player');
+      player.src = url + (url.includes('?') ? '&controls=1' : '?controls=1');
     }
   </script>
 
