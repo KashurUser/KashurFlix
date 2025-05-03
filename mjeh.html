@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BY DELHI GANG</title>
+    <title>Stream Player</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -119,9 +119,8 @@
     <!-- Popup for stream selection -->
     <div class="popup" id="popup">
         <div class="popup-content">
-            <h2>Select Stream</h2>
-            <button id="normal">Play Normal</button>
-            <button id="adfree">Play Adfree</button>
+            <h2>Select Player</h2>
+            <button id="play">Play with Selected Player</button>
         </div>
     </div>
 
@@ -130,6 +129,7 @@
         const container = document.querySelector('.container');
         const popup = document.getElementById('popup');
         const playerIframe = document.getElementById('player');
+        const playButton = document.getElementById('play');
         let selectedStream = null;
 
         // Fetching the JSON data from the URL
@@ -153,34 +153,20 @@
             });
 
         // Function to show the popup and select the stream
-        function selectStream(title, url, player_type) {
-            selectedStream = { title, url, player_type };
+        function selectStream(title, url, playerType) {
+            selectedStream = { title, url, playerType };
             popup.style.display = 'flex';
         }
 
-        // Play Normal button
-        document.getElementById('normal').addEventListener('click', () => {
-            loadPlayer(selectedStream.url, selectedStream.player_type, 'normal');
+        // Play with selected player
+        playButton.addEventListener('click', () => {
+            const playerURL = `https://kashurflix.netlify.app/${selectedStream.playerType}.html?url=${selectedStream.url}`;
+            loadPlayer(playerURL);
             popup.style.display = 'none';
         });
 
-        // Play Adfree button
-        document.getElementById('adfree').addEventListener('click', () => {
-            loadPlayer(selectedStream.url, selectedStream.player_type, 'adfree');
-            popup.style.display = 'none';
-        });
-
-        // Function to load the appropriate player based on player type
-        function loadPlayer(url, player_type, mode) {
-            let playerUrl = '';
-            if (player_type === 'html5') {
-                playerUrl = 'https://kashurflix.netlify.app/htmlv.html?url=' + url;
-            } else if (player_type === 'jwplayer') {
-                playerUrl = 'https://kashurflix.netlify.app/jwplayer.html?url=' + url;
-            } else if (player_type === 'playerio') {
-                playerUrl = 'https://kashurflix.netlify.app/playrio.html?url=' + url;
-            }
-
+        // Function to load the appropriate player based on the selected player
+        function loadPlayer(playerUrl) {
             playerIframe.src = playerUrl;
         }
     </script>
