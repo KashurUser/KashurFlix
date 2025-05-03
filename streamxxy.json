@@ -2,26 +2,26 @@
   "streams": [
     {
       "title": "SOURCE 1",
-      "url": "https://example.com/zee-cinema.m3u8",
-      "img": "https://example.com/images/zee-cinema.png",
+      "url": "https://hotstarlive.vercel.app/IPL/hindi.m3u8",
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkD5EgMIJLL1hw9g14k4Gnw2gJeDF-8fsT7QnYKZaKK2fzsgUV006bOLA&s=10",
       "player_type": "html5"
     },
     {
       "title": "SOURCE 2",
-      "url": "https://example.com/sony-max.m3u8",
-      "img": "https://example.com/images/sony-max.png",
+      "url": "https://hotstarlive.vercel.app/IPL/hindi.m3u8",
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkD5EgMIJLL1hw9g14k4Gnw2gJeDF-8fsT7QnYKZaKK2fzsgUV006bOLA&s=10",
       "player_type": "jwplayer"
     },
     {
       "title": "SOURCE 3",
-      "url": "https://example.com/star-gold.m3u8",
-      "img": "https://example.com/images/star-gold.png",
+      "url": "https://cors-anywhere.ammoapps.com/125.209.88.166:45793/BRN/ArySports.stream/playlist.m3u8",
+      "img": "https://wapka-img.zuna.id/e3d690f1.png",
       "player_type": "playerio"
     },
     {
       "title": "SOURCE 4",
-      "url": "https://example.com/colors-cineplex.m3u8",
-      "img": "https://example.com/images/colors-cineplex.png",
+      "url": "https://hotstarlive.vercel.app/IPL/hindi.m3u8",
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkD5EgMIJLL1hw9g14k4Gnw2gJeDF-8fsT7QnYKZaKK2fzsgUV006bOLA&s=10",
       "player_type": "html5"
     }
   ],
