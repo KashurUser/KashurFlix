@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Stream Player</title>
+    <title>BY DELHI GANG</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,6 +11,7 @@
             color: white;
             margin: 0;
             padding: 0;
+            position: relative;
         }
 
         .container {
@@ -18,6 +19,7 @@
             flex-wrap: wrap;
             justify-content: space-around;
             padding: 20px;
+            padding-top: 100px; /* Space for the fixed player */
         }
 
         .card {
@@ -88,93 +90,99 @@
             background-color: #45a049;
         }
 
-        iframe {
+        /* Fixed player */
+        #player-container {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 500px;
-            border: none;
+            z-index: 9999; /* Ensures it stays on top */
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Ensure that the page content doesn't overlap the fixed player */
+        body {
+            padding-top: 520px; /* Adjust this to match player height */
         }
     </style>
 </head>
 <body>
-
-    <div class="container" id="streams-container">
-        <!-- Stream Cards will be dynamically added here -->
+    <div id="player-container">
+        <iframe id="player" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
     </div>
 
-    <!-- Popup -->
-    <div id="popup" class="popup">
+    <div class="container">
+        <!-- Stream cards will be dynamically loaded here -->
+    </div>
+
+    <!-- Popup for stream selection -->
+    <div class="popup" id="popup">
         <div class="popup-content">
-            <h2>Select Player</h2>
-            <button onclick="loadPlayer('html5')">HTML5 Player</button>
-            <button onclick="loadPlayer('jwplayer')">JW Player</button>
-            <button onclick="loadPlayer('playerio')">Player.io</button>
-            <br><br>
-            <button onclick="closePopup()">Close</button>
+            <h2>Select Stream</h2>
+            <button id="normal">Play Normal</button>
+            <button id="adfree">Play Adfree</button>
         </div>
     </div>
 
-    <!-- Iframe to load the player -->
-    <div id="player-container">
-        <!-- Iframe will be added dynamically -->
-    </div>
-
     <script>
-        let currentStreamUrl = '';
-        let currentPlayerType = '';
+        const jsonURL = "https://kashurflix.netlify.app/streamxxy.json"; // Your JSON URL
+        const container = document.querySelector('.container');
+        const popup = document.getElementById('popup');
+        const playerIframe = document.getElementById('player');
+        let selectedStream = null;
 
-        // Fetch the JSON data
-        fetch('https://kashurflix.netlify.app/streamxxy.json')
+        // Fetching the JSON data from the URL
+        fetch(jsonURL)
             .then(response => response.json())
             .then(data => {
-                const streams = data.streams;
-                const container = document.getElementById('streams-container');
-                streams.forEach(stream => {
+                // Create stream cards based on fetched data
+                data.streams.forEach(stream => {
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
                         <img src="${stream.img}" alt="${stream.title}">
                         <h3>${stream.title}</h3>
-                        <button onclick="openPopup('${stream.title}', '${stream.url}', '${stream.player_type}')">Play</button>
+                        <button onclick="selectStream('${stream.title}', '${stream.url}', '${stream.player_type}')">Play</button>
                     `;
                     container.appendChild(card);
                 });
             })
             .catch(error => {
-                console.error('Error fetching JSON:', error);
+                console.error('Error fetching data:', error);
             });
 
-        // Open the popup with stream details
-        function openPopup(title, url, playerType) {
-            currentStreamUrl = url;
-            currentPlayerType = playerType;
-            document.getElementById('popup').style.display = 'flex';
+        // Function to show the popup and select the stream
+        function selectStream(title, url, player_type) {
+            selectedStream = { title, url, player_type };
+            popup.style.display = 'flex';
         }
 
-        // Close the popup
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
+        // Play Normal button
+        document.getElementById('normal').addEventListener('click', () => {
+            loadPlayer(selectedStream.url, selectedStream.player_type, 'normal');
+            popup.style.display = 'none';
+        });
 
-        // Load the selected player
-        function loadPlayer(playerType) {
-            const playerUrls = {
-                "html5": "https://kashurflix.netlify.app/htmlv.html",
-                "playerio": "https://kashurflix.netlify.app/playrio.html",
-                "jwplayer": "https://kashurflix.netlify.app/jwplayer.html"
-            };
+        // Play Adfree button
+        document.getElementById('adfree').addEventListener('click', () => {
+            loadPlayer(selectedStream.url, selectedStream.player_type, 'adfree');
+            popup.style.display = 'none';
+        });
 
-            const playerUrl = playerUrls[playerType];
-            if (playerUrl) {
-                const iframe = document.createElement('iframe');
-                iframe.src = `${playerUrl}?url=${currentStreamUrl}`;
-                iframe.width = "100%";
-                iframe.height = "500px";
-                document.getElementById('player-container').innerHTML = '';  // Clear previous iframe
-                document.getElementById('player-container').appendChild(iframe);
+        // Function to load the appropriate player based on player type
+        function loadPlayer(url, player_type, mode) {
+            let playerUrl = '';
+            if (player_type === 'html5') {
+                playerUrl = 'https://kashurflix.netlify.app/htmlv.html?url=' + url;
+            } else if (player_type === 'jwplayer') {
+                playerUrl = 'https://kashurflix.netlify.app/jwplayer.html?url=' + url;
+            } else if (player_type === 'playerio') {
+                playerUrl = 'https://kashurflix.netlify.app/playrio.html?url=' + url;
             }
-            closePopup();
+
+            playerIframe.src = playerUrl;
         }
     </script>
-
 </body>
 </html>
