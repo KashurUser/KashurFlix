@@ -1,0 +1,33 @@
+{
+  "streams": [
+    {
+      "title": "SOURCE 1",
+      "url": "https://example.com/zee-cinema.m3u8",
+      "img": "https://example.com/images/zee-cinema.png",
+      "player_type": "html5"
+    },
+    {
+      "title": "SOURCE 2",
+      "url": "https://example.com/sony-max.m3u8",
+      "img": "https://example.com/images/sony-max.png",
+      "player_type": "jwplayer"
+    },
+    {
+      "title": "SOURCE 3",
+      "url": "https://example.com/star-gold.m3u8",
+      "img": "https://example.com/images/star-gold.png",
+      "player_type": "playerio"
+    },
+    {
+      "title": "SOURCE 4",
+      "url": "https://example.com/colors-cineplex.m3u8",
+      "img": "https://example.com/images/colors-cineplex.png",
+      "player_type": "html5"
+    }
+  ],
+  "players": {
+    "html5": "https://kashurflix.netlify.app/htmlv.html",
+    "playerio": "https://kashurflix.netlify.app/playrio.html",
+    "jwplayer": "https://kashurflix.netlify.app/jwplayer.html"
+  }
+}
