@@ -132,6 +132,7 @@
         const playerIframe = document.getElementById('player');
         const playButton = document.getElementById('play');
         let selectedStream = null;
+        let selectedPlayer = null;
 
         // Fetching the JSON data from the URL
         fetch(jsonURL)
@@ -156,14 +157,17 @@
         // Function to show the popup and select the stream
         function selectStream(title, url, playerType) {
             selectedStream = { title, url, playerType };
+            selectedPlayer = selectedStream.playerType;
             popup.style.display = 'flex';
         }
 
         // Play with selected player
         playButton.addEventListener('click', () => {
-            const playerURL = `https://kashurflix.netlify.app/${selectedStream.playerType}.html?url=${selectedStream.url}`;
-            loadPlayer(playerURL);
-            popup.style.display = 'none';
+            if (selectedStream && selectedPlayer) {
+                const playerBaseUrl = `https://kashurflix.netlify.app/${selectedPlayer}.html?url=${selectedStream.url}`;
+                loadPlayer(playerBaseUrl);
+                popup.style.display = 'none';
+            }
         });
 
         // Function to load the appropriate player based on the selected player
