@@ -1,0 +1,19 @@
+{
+  "starhindi": "https://wasiteam.online/sports/master.m3u8/?key=WASITV&wmsAuthSign=4e7a51364e5445364e6a45674e4449744d7a41744e5449774d67&c=starhindi",
+  "star": "https://live-proxy.vercel.app/cors?url=https://oriby-streaming-proxy.sultanarabi161.workers.dev/https://rips.in/stream/ch4/use-embed-plz.m3u8",
+  "hindi": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=hin",
+  "english": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=eng",
+  "panjabi": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=pan",
+  "bhojpuri": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=bho",
+  "bengali": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=ben",
+  "haryanvi": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=har",
+  "tamil": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=tam",
+  "telugu": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=tel",
+  "gujarati": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=guj",
+  "kannada": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=kan",
+  "malayalam": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=mal",
+  "battercam": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=batter_cam",
+  "herocam": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=hero_cam",
+  "stumpcam": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=stump_cam",
+  "fieldview": "https://psplayflix.site/2025/ps_ipl-liv.m3u8?ps=field_view_cam"
+}
