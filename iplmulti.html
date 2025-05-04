@@ -1,149 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Responsive HLS Player with Plyr</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Plyr CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Multi Quality Player</title>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
   <style>
     body {
-      background: #000;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: sans-serif;
+      padding: 20px;
     }
-    .player-container {
+    video {
+      width: 100%;
       max-width: 800px;
-      margin: 20px auto;
-      position: relative;
+      height: auto;
+      border: 2px solid #fff;
+      border-radius: 12px;
+      margin-bottom: 20px;
     }
-    /* Language selector overlay */
-    #language-selector {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-    }
-    #language-selector select {
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      border: 1px solid #444;
-      padding: 5px;
-      font-size: 14px;
+    select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #333;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="player-container">
-    <!-- Video element -->
-    <video id="player" playsinline controls crossorigin></video>
-    <!-- Language selector (overlay) -->
-    <div id="language-selector">
-      <select id="language-select">
-        <option value="">Loading...</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- Plyr and HLS.js scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.js"></script>
+  <video id="player" controls playsinline></video>
+
+  <select id="streamSelect">
+    <option value="https://yourdomain.com/video240.m3u8">240p</option>
+    <option value="https://yourdomain.com/video360.m3u8">360p</option>
+    <option value="https://yourdomain.com/video480.m3u8">480p</option>
+    <option value="https://yourdomain.com/video720.m3u8">720p</option>
+    <option value="https://yourdomain.com/video1080.m3u8">1080p</option>
+  </select>
+
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
+  <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const video = document.getElementById('player');
-      const languageSelect = document.getElementById('language-select');
+    const video = document.getElementById('player');
+    const select = document.getElementById('streamSelect');
 
-      // Helper: format language keys (e.g., "hindi" -> "Hindi", "hero_cam" -> "Hero Cam")
-      function formatLanguageName(key) {
-        return key.replace(/_/g, ' ')
-                  .replace(/\b\w/g, c => c.toUpperCase());
+    let hls;
+    let player;
+
+    function loadStream(url) {
+      console.log("Switching to:", url);
+
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+      if (player) {
+        player.destroy();
+        player = null;
       }
 
-      // Load language JSON and populate selector
-      fetch('https://kashurflix.netlify.app/iplxcd.json')
-        .then(response => response.json())
-        .then(data => {
-          languageSelect.innerHTML = '';  // clear loading text
-          Object.keys(data).forEach((langKey, index) => {
-            const option = document.createElement('option');
-            option.value = data[langKey];
-            option.textContent = formatLanguageName(langKey);
-            languageSelect.appendChild(option);
-          });
-          // If at least one language, load the first by default
-          if (languageSelect.options.length > 0) {
-            loadStream(languageSelect.options[0].value);
-          }
-        })
-        .catch(err => {
-          console.error('Failed to load language list:', err);
-          languageSelect.innerHTML = '<option>Error loading languages</option>';
-        });
+      video.removeAttribute('src');
+      video.load();
 
-      // Listen for language change
-      languageSelect.addEventListener('change', function() {
-        if (this.value) {
-          loadStream(this.value);
-        }
-      });
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
 
-      // Global Plyr and HLS instances
-      let player = null;
-      let hls = null;
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          const availableQualities = hls.levels.map(l => l.height).sort((a, b) => b - a);
+          const defaultQuality = availableQualities[0];
 
-      // Function to load an HLS stream URL into the player
-      function loadStream(url) {
-        // Clean up existing instances
-        if (hls) {
-          hls.destroy();
-          hls = null;
-        }
-        if (player) {
-          player.destroy();
-          player = null;
-        }
-        // Set up HLS if supported
-        if (Hls.isSupported()) {
-          hls = new Hls();
-          hls.loadSource(url);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            // Build quality options from available levels
-            const availableQualities = hls.levels
-              .map(l => l.height)
-              .sort((a, b) => b - a); // sort descending
-            const defaultQuality = availableQualities[0];
-
-            // Initialize Plyr with quality options (forced to use HLS)
-            player = new Plyr(video, {
-              quality: {
-                default: defaultQuality,
-                options: availableQualities,
-                forced: true,
-                onChange: newQuality => {
-                  // Update HLS current level on quality change
-                  hls.levels.forEach((lvl, i) => {
-                    if (lvl.height === newQuality) {
-                      hls.currentLevel = i;
-                    }
-                  });
-                }
+          player = new Plyr(video, {
+            quality: {
+              default: defaultQuality,
+              options: availableQualities,
+              forced: true,
+              onChange: newQuality => {
+                hls.levels.forEach((level, i) => {
+                  if (level.height === newQuality) {
+                    hls.currentLevel = i;
+                  }
+                });
               }
-            });
-            // Autoplay the stream
-            video.play().catch(() => {
-              /* Autoplay might be blocked on mobile; user can manually play */
-            });
+            }
           });
-        } else {
-          // Fallback: direct video source without HLS
-          video.src = url;
-          player = new Plyr(video);
-        }
+
+          video.play().catch(() => {
+            console.log("Autoplay blocked, please click play");
+          });
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('loadedmetadata', () => {
+          video.play().catch(() => {
+            console.log("Autoplay blocked");
+          });
+        });
+        player = new Plyr(video);
       }
+    }
+
+    // Initial load
+    loadStream(select.value);
+
+    // On dropdown change
+    select.addEventListener('change', () => {
+      loadStream(select.value);
     });
   </script>
 </body>
