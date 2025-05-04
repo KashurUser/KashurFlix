@@ -106,7 +106,13 @@
       }
 
       initHls(streams[currentLang]);
-      const player = new Plyr(video);
+      const player = new Plyr(video, {
+  controls: [
+    'play-large', 'play', 'progress', 'current-time', 'mute', 'volume',
+    'settings', 'fullscreen'
+  ],
+  settings: ['quality']
+});
 
       player.on('ready', () => {
         const container = player.elements.container;
