@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NETFLIX</title>
+  <title>Iframe with Redirect After 5 Seconds</title>
   <style>
     /* Make the iframe fullscreen */
     html, body {
@@ -30,20 +30,26 @@
   <script>
     const iframe = document.getElementById('myIframe');
 
-    // Function to check the number of page reloads
-    function checkReloads() {
-      let reloadCount = localStorage.getItem('reloadCount') || 0;
-      reloadCount = parseInt(reloadCount) + 1;
-      localStorage.setItem('reloadCount', reloadCount);
+    // Function to check if 5 seconds have passed
+    function checkTimeElapsed() {
+      const firstVisitTime = localStorage.getItem('firstVisitTime');
+      const currentTime = new Date().getTime();
 
-      // Redirect after the 10th reload
-      if (reloadCount >= 10) {
-        window.location.href = 'https://t.me/+M7CsfCxJNr5mNDk1';  // Redirect to the Telegram link
+      // If it's the user's first visit, save the current time
+      if (!firstVisitTime) {
+        localStorage.setItem('firstVisitTime', currentTime);
+      } else {
+        const timeElapsed = currentTime - firstVisitTime;
+        
+        // Redirect after 5 seconds (5000 milliseconds)
+        if (timeElapsed >= 5000) {
+          window.location.href = 'https://t.me/+M7CsfCxJNr5mNDk1';  // Redirect to the Telegram link
+        }
       }
     }
 
-    // Check reload count on page load
-    window.onload = checkReloads;
+    // Check time elapsed on page load
+    window.onload = checkTimeElapsed;
 
     // Blocking and redirecting specific URL (Telegram URL inside iframe)
     const blockedUrl = 'https://t.me/AppoloTvPro';
