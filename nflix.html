@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NETFLIX X</title>
-  <style>    /* Make the iframe fullscreen */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NETFLIX X</title>
+  <style>
+    /* Make the iframe fullscreen */
     html, body {
       margin: 0;
       padding: 0;
@@ -19,44 +20,7 @@
       border: none;
       display: block;
     }
-  </style>
-</head>
-<body>
 
-  <iframe id="myIframe" src="https://nflix.iptvbd.online/" onload="iframeLoaded()"></iframe>
-
-  <script>
-    const blockedUrl = 'https://t.me/AppoloTvPro';
-    const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
-    const iframe = document.getElementById('myIframe');
-
-    function iframeLoaded() {
-      try {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-        iframeDoc.addEventListener('click', function(event) {
-          if (event.target && event.target.href === blockedUrl) {
-            event.preventDefault();
-            window.location.href = redirectUrl;
-          }
-        });
-      } catch (e) {
-        // Cannot access iframe due to cross-origin policy
-        console.warn('Cross-origin iframe. Cannot block link from inside.');
-      }
-    }
-  </script>
-  
-  <script>
-  const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
-  let visitCount = localStorage.getItem('visitCount') || 0;
-  visitCount = parseInt(visitCount) + 1;
-  localStorage.setItem('visitCount', visitCount);
-  if (visitCount % 5 === 0) {
-    window.open(telegramLink, '_blank'); // Opens in new tab/window
-  }
-  </script>
-    <style>
     body {
       margin: 0;
       padding-bottom: 130px; /* Increase padding to match banner height */
@@ -89,10 +53,50 @@
     #tg-banner a:hover {
       text-decoration: underline;
     }
+
+    /* App Icon Image */
+    #appLogo {
+      position: fixed;
+      bottom: 190px; /* Adjust spacing above button */
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      z-index: 10000;
+      display: none;
+    }
+
+    /* Install App Button */
+    #installButton {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #0088cc;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      z-index: 1000;
+      display: none; /* Hidden by default */
+    }
+
+    #installButton:hover {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Embed iframe -->
+  <iframe id="myIframe" src="https://nflix.iptvbd.online/" onload="iframeLoaded()"></iframe>
+
+  <!-- App Icon Image -->
+  <img id="appLogo" src="https://static-00.iconduck.com/assets.00/netflix-icon-icon-2048x2048-yj41gpvr.png" alt="App Icon">
+
+  <!-- Install App Button -->
+  <button id="installButton">Install App</button>
 
   <!-- Telegram Banner -->
   <div id="tg-banner">
@@ -100,6 +104,65 @@
       Join our Telegram Channel for Updates
     </a>
   </div>
+
+  <script>
+    const blockedUrl = 'https://t.me/AppoloTvPro';
+    const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
+    const iframe = document.getElementById('myIframe');
+
+    function iframeLoaded() {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        iframeDoc.addEventListener('click', function(event) {
+          if (event.target && event.target.href === blockedUrl) {
+            event.preventDefault();
+            window.location.href = redirectUrl;
+          }
+        });
+      } catch (e) {
+        // Cannot access iframe due to cross-origin policy
+        console.warn('Cross-origin iframe. Cannot block link from inside.');
+      }
+    }
+
+    const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
+    let visitCount = localStorage.getItem('visitCount') || 0;
+    visitCount = parseInt(visitCount) + 1;
+    localStorage.setItem('visitCount', visitCount);
+    if (visitCount % 5 === 0) {
+      window.open(telegramLink, '_blank'); // Opens in new tab/window
+    }
+
+    // PWA Installation logic
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent the default install prompt
+      e.preventDefault();
+      deferredPrompt = e;
+
+      // Show Install App button
+      const installButton = document.getElementById('installButton');
+      const appLogo = document.getElementById('appLogo');
+      installButton.style.display = 'block'; // Show the install button
+      appLogo.style.display = 'block'; // Show the app icon
+
+      installButton.addEventListener('click', () => {
+        // Show the native install prompt
+        deferredPrompt.prompt();
+
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+          } else {
+            console.log('User dismissed the A2HS prompt');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>
