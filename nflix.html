@@ -1,0 +1,28 @@
+<iframe id="myIframe" src="https://nflix.iptvbd.online/" width="600" height="400" onload="iframeLoaded()"></iframe>
+
+<script>
+  // Define the blocked URL and the redirect URL
+  const blockedUrl = 'https://t.me/AppoloTvPro';
+  const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
+
+  function iframeLoaded() {
+    const iframe = document.getElementById('myIframe');
+
+    // Check if the iframe content is loaded
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+    // Add an event listener for clicks inside the iframe
+    iframeDoc.addEventListener('click', function(event) {
+      // Check if the clicked link matches the blocked Telegram URL
+      if (event.target && event.target.href === blockedUrl) {
+        event.preventDefault(); // Prevent the link from opening in the iframe
+
+        // Redirect the user to the new Telegram link in a new tab
+        window.open(redirectUrl, '_blank');
+
+        // Optionally, you can alert the user
+        alert('This link is blocked. Redirecting to a new Telegram channel.');
+      }
+    });
+  }
+</script>
