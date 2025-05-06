@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iframe Fullscreen Site</title>
-  <style>
-    /* Make the iframe fullscreen */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iframe Fullscreen Site</title>
+  <style>    /* Make the iframe fullscreen */
     html, body {
       margin: 0;
       padding: 0;
@@ -20,146 +19,40 @@
       border: none;
       display: block;
     }
-
-    /* Overlay to block interactions with the iframe */
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      display: none; /* Hidden by default */
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 24px;
-    }
-
-    /* Message for the overlay */
-    .overlay-message {
-      text-align: center;
-    }
-
-    .overlay-button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #ff3b3b;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .overlay-button:hover {
-      background-color: #e60000;
-    }
-  </style>
+  </style>
 </head>
 <body>
 
-  <!-- The iframe that loads the external site -->
-  <iframe id="myIframe" src="https://nflix.iptvbd.online/" onload="iframeLoaded()"></iframe>
+  <iframe id="myIframe" src="https://nflix.iptvbd.online/" onload="iframeLoaded()"></iframe>
 
-  <!-- Overlay that blocks interaction -->
-  <div id="overlay" class="overlay">
-    <div class="overlay-message">
-      Are you sure you want to stop playback?
-      <button class="overlay-button" onclick="stopPlayback()">Yes, Stop Playback</button>
-    </div>
-  </div>
+  <script>
+    const blockedUrl = 'https://t.me/AppoloTvPro';
+    const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
+    const iframe = document.getElementById('myIframe');
 
-  <script>
-    // Define the blocked URL and the redirect URL
-    const blockedUrl = 'https://t.me/AppoloTvPro';
-    const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
-    const iframe = document.getElementById('myIframe');
-    const overlay = document.getElementById('overlay');
+    function iframeLoaded() {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-    // Show overlay when user tries to stop playback or interact with the iframe
-    function iframeLoaded() {
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-      // Listen for a click inside the iframe
-      iframeDoc.addEventListener('click', function(event) {
-        // Check if the clicked link matches the blocked Telegram URL
-        if (event.target && event.target.href === blockedUrl) {
-          // Block the link by preventing the default action
-          event.preventDefault();
-          window.open(redirectUrl, '_blank');  // Open the redirect URL in a new tab
-          alert('This URL is blocked. Redirecting to a new Telegram channel.');
-        }
-
-        // Trigger the overlay when stopping the stream (to block confirmation dialog)
-        if (event.target && event.target.id === 'stopButton') {
-          // Show overlay to block interaction and prevent the prompt
-          overlay.style.display = 'flex';
-        }
-      });
-    }
-
-    // Handle the stop playback button click from the overlay
-    function stopPlayback() {
-      // Redirect to a new URL (simulating the stop of playback)
-      window.location.href = redirectUrl;  // Redirect to the new URL directly
-    }
-  </script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram Button Example</title>
-  <style>
-    /* Button style for Telegram */
-    .tg-button {
-      position: fixed;
-      bottom: 20px;  /* Distance from bottom */
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 20px;
-      background-color: #0088cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      z-index: 1000;
-      display: none; /* Initially hidden */
-    }
-
-    .tg-button:hover {
-      background-color: #0077b5;
-    }
-
-  </style>
-</head>
-<body>
-
-  <!-- Telegram Button -->
-  <a id="tgButton" class="tg-button" href="https://t.me/+M7CsfCxJNr5mNDk1" target="_blank">Join Telegram</a>
-
-  <script>
-    const tgButton = document.getElementById('tgButton');
-
-    // Function to show the Telegram button
-    function showTelegramButton() {
-      tgButton.style.display = 'block';  // Show the button
-    }
-
-    // You can call showTelegramButton() based on scroll or other events
-    // For example, after scrolling to the bottom of an iframe or content
-    window.addEventListener('scroll', () => {
-      if (document.documentElement.scrollTop + window.innerHeight >= document.documentElement.scrollHeight) {
-        showTelegramButton();
-      } else {
-        tgButton.style.display = 'none';  // Hide the button when scrolling up
-      }
-    });
-
-  </script>
-
-</body>
-</html>
+        iframeDoc.addEventListener('click', function(event) {
+          if (event.target && event.target.href === blockedUrl) {
+            event.preventDefault();
+            window.location.href = redirectUrl;
+          }
+        });
+      } catch (e) {
+        // Cannot access iframe due to cross-origin policy
+        console.warn('Cross-origin iframe. Cannot block link from inside.');
+      }
+    }
+  </script>
+  
+  <script>
+  const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
+  let visitCount = localStorage.getItem('visitCount') || 0;
+  visitCount = parseInt(visitCount) + 1;
+  localStorage.setItem('visitCount', visitCount);
+  if (visitCount % 5 === 0) {
+    window.open(telegramLink, '_blank'); // Opens in new tab/window
+  }
+</script>
