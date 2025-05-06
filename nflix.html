@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iframe Fullscreen Site</title>
+  <title>NETFLIX</title>
   <style>
     /* Make the iframe fullscreen */
     html, body {
@@ -11,6 +11,7 @@
       padding: 0;
       height: 100%;
       overflow: hidden;
+      position: relative;
     }
 
     iframe {
@@ -27,37 +28,42 @@
   <iframe id="myIframe" src="https://nflix.iptvbd.online/" onload="iframeLoaded()"></iframe>
 
   <script>
-    // Define the blocked URL and the redirect URL
+    const iframe = document.getElementById('myIframe');
+
+    // Function to check the number of page reloads
+    function checkReloads() {
+      let reloadCount = localStorage.getItem('reloadCount') || 0;
+      reloadCount = parseInt(reloadCount) + 1;
+      localStorage.setItem('reloadCount', reloadCount);
+
+      // Redirect after the 10th reload
+      if (reloadCount >= 10) {
+        window.location.href = 'https://t.me/+M7CsfCxJNr5mNDk1';  // Redirect to the Telegram link
+      }
+    }
+
+    // Check reload count on page load
+    window.onload = checkReloads;
+
+    // Blocking and redirecting specific URL (Telegram URL inside iframe)
     const blockedUrl = 'https://t.me/AppoloTvPro';
     const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
 
-    // Listen for messages from the iframe
-    window.addEventListener('message', function(event) {
-      // Check the message origin (important for security)
-      if (event.origin !== 'https://nflix.iptvbd.online') return; // Replace with the iframe source domain if needed
+    // Listen for clicks inside the iframe
+    iframe.addEventListener('load', function() {
+      const iframeWindow = iframe.contentWindow;
+      const iframeDocument = iframeWindow.document;
 
-      // Check if the message is about the blocked URL
-      if (event.data === blockedUrl) {
-        // Prevent the link from being opened in the iframe
-        window.open(redirectUrl, '_blank');  // Open new URL in a new tab
-        alert('This URL is blocked. Redirecting to a new Telegram channel.');
-      }
-    });
-
-    function iframeLoaded() {
-      const iframe = document.getElementById('myIframe');
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-      // Add an event listener for clicks inside the iframe
-      iframeDoc.addEventListener('click', function(event) {
-        // Check if the clicked link matches the blocked Telegram URL
-        if (event.target && event.target.href === blockedUrl) {
-          // Send a message to the parent to block the link and redirect
-          parent.postMessage(blockedUrl, '*');
-          event.preventDefault(); // Prevent the link from being followed
+      iframeDocument.addEventListener('click', function(event) {
+        // Check if the clicked URL matches the blocked URL
+        if (event.target && event.target.href && event.target.href.includes(blockedUrl)) {
+          event.preventDefault(); // Block the default action (link click)
+          // Redirect to the new Telegram URL
+          window.location.href = redirectUrl;
         }
       });
-    }
+    });
+
   </script>
 
 </body>
