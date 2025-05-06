@@ -1,28 +1,64 @@
-<iframe id="myIframe" src="https://nflix.iptvbd.online/" width="600" height="400" onload="iframeLoaded()"></iframe>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iframe Fullscreen Site</title>
+  <style>
+    /* Make the iframe fullscreen */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
 
-<script>
-  // Define the blocked URL and the redirect URL
-  const blockedUrl = 'https://t.me/AppoloTvPro';
-  const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
 
-  function iframeLoaded() {
-    const iframe = document.getElementById('myIframe');
+  <!-- The iframe that loads the external site -->
+  <iframe id="myIframe" src="https://nflix.iptvbd.online/" onload="iframeLoaded()"></iframe>
 
-    // Check if the iframe content is loaded
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+  <script>
+    // Define the blocked URL and the redirect URL
+    const blockedUrl = 'https://t.me/AppoloTvPro';
+    const redirectUrl = 'https://t.me/+M7CsfCxJNr5mNDk1';
 
-    // Add an event listener for clicks inside the iframe
-    iframeDoc.addEventListener('click', function(event) {
-      // Check if the clicked link matches the blocked Telegram URL
-      if (event.target && event.target.href === blockedUrl) {
-        event.preventDefault(); // Prevent the link from opening in the iframe
+    // Listen for messages from the iframe
+    window.addEventListener('message', function(event) {
+      // Check the message origin (important for security)
+      if (event.origin !== 'https://nflix.iptvbd.online') return; // Replace with the iframe source domain if needed
 
-        // Redirect the user to the new Telegram link in a new tab
-        window.open(redirectUrl, '_blank');
-
-        // Optionally, you can alert the user
-        alert('This link is blocked. Redirecting to a new Telegram channel.');
+      // Check if the message is about the blocked URL
+      if (event.data === blockedUrl) {
+        // Prevent the link from being opened in the iframe
+        window.open(redirectUrl, '_blank');  // Open new URL in a new tab
+        alert('This URL is blocked. Redirecting to a new Telegram channel.');
       }
     });
-  }
-</script>
+
+    function iframeLoaded() {
+      const iframe = document.getElementById('myIframe');
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+      // Add an event listener for clicks inside the iframe
+      iframeDoc.addEventListener('click', function(event) {
+        // Check if the clicked link matches the blocked Telegram URL
+        if (event.target && event.target.href === blockedUrl) {
+          // Send a message to the parent to block the link and redirect
+          parent.postMessage(blockedUrl, '*');
+          event.preventDefault(); // Prevent the link from being followed
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
