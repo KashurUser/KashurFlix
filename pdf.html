@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDF Editor</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h1>PDF Editor</h1>
+
+  <input type="file" id="upload" accept="application/pdf" />
+  <canvas id="pdf-canvas"></canvas>
+
+  <br/>
+  <input type="text" id="textInput" placeholder="Enter text to add" />
+  <button id="addTextBtn">Add Text</button>
+  <button id="saveBtn">Save as New PDF</button>
+
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <!-- PDF-lib -->
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <!-- Custom JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>
