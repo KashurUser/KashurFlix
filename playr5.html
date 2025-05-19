@@ -23,7 +23,7 @@
 
 
 
-  <title>JOIN TV4WAP</title>
+  <title>PLAYER 5</title>
   <style>
     body {
             font-family: Arial, sans-serif;
@@ -105,31 +105,24 @@
 
 
 
-
   <script>
-    // Telegram redirect URL
-    const tgLink = "https://t.me/+M7CsfCxJNr5mNDk1"; // <-- Apna TG link yahan daalein
-
-    // Get refresh count from localStorage
+    const tgLink = "https://t.me/+M7CsfCxJNr5mNDk1"; // <-- Apna TG link daalein
     let count = localStorage.getItem("refreshCount");
 
-    // If not set, initialize it to 0
     if (!count) {
       count = 0;
     }
 
-    // Convert to number and increment
     count = parseInt(count) + 1;
-
-    // Update localStorage
     localStorage.setItem("refreshCount", count);
 
-    // If refresh count reaches 10, redirect to Telegram
     if (count >= 10) {
-      localStorage.removeItem("refreshCount"); // Reset count
-      window.location.href = tgLink;
+      localStorage.removeItem("refreshCount"); // Reset
+      window.open(tgLink, '_blank'); // Open in new tab
     }
   </script>
 </head>
+<body>
+  <h2>Refresh this page 10 times to open Telegram link in a new tab!</h2>
+</body>
 </html>
-  
