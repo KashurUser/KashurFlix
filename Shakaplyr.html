@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Shaka Player with Seek Bar and Fullscreen</title>
+  <meta charset="UTF-8">
+  <title>Shaka Player - Centered 16:9</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.8.1/shaka-player.ui.min.js"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.8.1/controls.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.8.1/controls.min.css" />
   <style>
     body {
       margin: 0;
@@ -27,74 +24,62 @@
     video {
       width: 100%;
       height: 100%;
-      outline: none;
-    }
-
-    /* Optional: Make sure seek bar is visible and big enough */
-    .shaka-seek-bar-container {
-      height: 16px !important;
-    }
-    .shaka-seek-bar {
-      background-color: #444 !important;
-      height: 6px !important;
-      border-radius: 3px !important;
-    }
-    .shaka-played-segment {
-      background-color: #0af !important;
-      height: 6px !important;
-      border-radius: 3px !important;
     }
   </style>
 </head>
 <body>
-  <div class="video-container" id="video-container">
-    <video id="video" autoplay playsinline></video>
+
+  <div class="video-container">
+    <video id="video" autoplay muted playsinline></video>
+    <div class="shaka-controls-container" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
   </div>
 
   <script>
-    const video = document.getElementById("video");
-    const container = document.getElementById("video-container");
-
-    // get 'url' param from query string
+    const video = document.getElementById('video');
+    const container = document.querySelector('.video-container');
     const urlParams = new URLSearchParams(window.location.search);
-    const manifestUri = urlParams.get("url");
+    const manifestUri = urlParams.get('url');
 
     function initApp() {
       shaka.polyfill.installAll();
 
       if (!shaka.Player.isBrowserSupported()) {
-        alert("Browser not supported!");
+        alert('Browser not supported!');
         return;
       }
 
       const player = new shaka.Player(video);
       const ui = new shaka.ui.Overlay(player, container, video);
+      const controls = ui.getControls();
 
+      // Enable quality selection
       ui.configure({
         controlPanelElements: [
-          "play_pause",
-          "mute",
-          "volume",
-          "seek_bar",          // Make sure seek bar is here
-          "time_and_duration",
-          "fullscreen",
-          "overflow_menu",
+          'play_pause', 'mute', 'volume', 'spacer', 'time_and_duration', 'overflow_menu'
         ],
-        overflowMenuButtons: ["quality", "language", "playback_rate", "captions"],
+        overflowMenuButtons: ['quality', 'language', 'playback_rate', 'captions'],
         addBigPlayButton: true,
+        seekBarColors: {
+          base: 'gray',
+          buffered: 'lightblue',
+          played: 'cyan'
+        }
       });
 
-      player.addEventListener("error", (e) => {
-        console.error("Error code", e.detail.code, e.detail);
-        alert("Error: " + e.detail.message);
+      player.addEventListener('error', (e) => {
+        console.error('Error:', e.detail);
+        alert(`Playback Error ${e.detail.code}`);
       });
 
       player.load(manifestUri).then(() => {
-        console.log("The video has now been loaded!");
+        console.log('Stream loaded');
+      }).catch((e) => {
+        console.error('Load failed', e);
       });
     }
 
-    document.addEventListener("DOMContentLoaded", initApp);
+    document.addEventListener('DOMContentLoaded', initApp);
   </script>
+
 </body>
 </html>
