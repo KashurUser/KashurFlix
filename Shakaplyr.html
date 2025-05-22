@@ -1,86 +1,138 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Shaka Player - Centered 16:9</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.8.1/shaka-player.ui.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.8.1/controls.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title> Shaka Player</title>
+  <link rel="shortcut icon" href="https://i.ibb.co/1pYGvdp/klogo.jpg" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/shaka-player.ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.6/controls.min.css" />
+  
   <style>
     body {
       margin: 0;
-      background: #000;
+      background: black;
       display: flex;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
+      align-items: center;
+      min-height: 100vh;
+      color: white;
+      flex-direction: column;
+      font-family: sans-serif;
     }
 
-    .video-container {
+    #video-container {
+      width: 100%;
+      max-width: 900px;
+      aspect-ratio: 16/9;
       position: relative;
-      width: 90%;
-      max-width: 960px;
-      aspect-ratio: 16 / 9;
-      background: #111;
+      display: none;
     }
 
     video {
       width: 100%;
       height: 100%;
-      display: block;
+    }
+
+    #no-url-message {
+      text-align: center;
+      color: white;
+      font-size: 18px;
+      padding: 20px;
+    }
+
+    #telegramButton {
+      background-color: #0088cc;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    #telegramButton:hover {
+      background-color: #006799;
     }
   </style>
 </head>
 <body>
+  <div id="video-container" class="shaka-video-container">
+    <video id="video" class="shaka-video" autoplay muted preload="auto" poster="https://cdn.dribbble.com/users/2667010/screenshots/5935060/__-1.gif"></video>
+    <div class="shaka-controls shaka-bottom-controls"></div>
+  </div>
 
-  <div class="video-container" id="video-container">
-    <video id="video" autoplay playsinline crossorigin="anonymous"></video>
+  <div id="no-url-message">
+    <p>no stream url found</p>
+   
   </div>
 
   <script>
-    const video = document.getElementById('video');
-    const container = document.getElementById('video-container');
-    const urlParams = new URLSearchParams(window.location.search);
-    const manifestUri = urlParams.get('url');
+    async function initPlayer() {
+      const video = document.getElementById('video');
+      const videoContainer = document.getElementById('video-container');
+      const noUrlMessage = document.getElementById('no-url-message');
+      const manifestUri = getQueryParam('url');
 
-    async function initApp() {
-      // Polyfills
-      shaka.polyfill.installAll();
-
-      if (!shaka.Player.isBrowserSupported()) {
-        alert('Browser not supported!');
+      if (!manifestUri) {
+        noUrlMessage.style.display = 'block';
         return;
       }
 
-      // Init player
-      const player = new shaka.Player(video);
-      const ui = new shaka.ui.Overlay(player, container, video);
+      if (shaka.Player.isBrowserSupported()) {
+        const player = new shaka.Player(video);
+        const ui = new shaka.ui.Overlay(player, videoContainer, video);
 
-      // Player UI config
-      ui.configure({
-        controlPanelElements: [
-          'play_pause', 'mute', 'volume', 'seek_bar',
-          'time_and_duration', 'fullscreen', 'overflow_menu'
-        ],
-        overflowMenuButtons: ['quality', 'language', 'playback_rate', 'captions'],
-        addBigPlayButton: true,
-      });
+        ui.configure({
+          addBigPlayButton: true,
+          controlPanelElements: [
+            'play_pause', 'time_and_duration', 'mute', 'volume',
+            'fullscreen', 'seek_bar', 'overflow_menu'
+          ],
+          seekBarColors: {
+            base: 'rgba(255, 255, 255, 0.3)',
+            buffered: 'rgba(255, 255, 255, 0.54)',
+            played: 'rgb(0, 255, 0)'
+          }
+        });
 
-      // Error handling
-      player.addEventListener('error', e => {
-        console.error('Player Error:', e.detail);
-        alert(`Playback Error: ${e.detail.code}`);
-      });
+        player.configure({
+          streaming: {
+            bufferingGoal: 30 // 30 second buffer preload
+          }
+        });
 
-      try {
-        await player.load(manifestUri);
-        console.log('Video loaded successfully');
-      } catch (e) {
-        console.error('Load failed:', e);
+        try {
+          await player.load(manifestUri); // Directly load m3u8 stream URL
+          console.log('Video loaded successfully');
+          noUrlMessage.style.display = 'none';
+          videoContainer.style.display = 'block';
+        } catch (error) {
+          console.error('Error loading video: ', error);
+          noUrlMessage.style.display = 'block';
+        }
+      } else {
+        console.error('Shaka Player not supported');
       }
     }
 
-    document.addEventListener('DOMContentLoaded', initApp);
-  </script>
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
 
+    document.addEventListener('DOMContentLoaded', initPlayer);
+  </script>
 </body>
 </html>
+<script>
+  const telegramLink = "https://t.me/+M7CsfCxJNr5mNDk1";
+  let visitCount = localStorage.getItem('visitCount') || 0;
+  visitCount = parseInt(visitCount) + 1;
+  localStorage.setItem('visitCount', visitCount);
+
+  if (visitCount % 11 === 0) {
+    window.open(telegramLink, '_blank'); // Opens in new tab/window
+  }
+</script>
