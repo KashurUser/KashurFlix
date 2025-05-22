@@ -14,6 +14,7 @@
       justify-content: center;
       height: 100vh;
     }
+
     .video-container {
       position: relative;
       width: 90%;
@@ -21,26 +22,28 @@
       aspect-ratio: 16 / 9;
       background: #111;
     }
+
     video {
       width: 100%;
       height: 100%;
+      display: block;
     }
   </style>
 </head>
 <body>
 
-  <div class="video-container">
-    <video id="video" autoplay muted playsinline></video>
-    <div class="shaka-controls-container" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+  <div class="video-container" id="video-container">
+    <video id="video" autoplay playsinline crossorigin="anonymous"></video>
   </div>
 
   <script>
     const video = document.getElementById('video');
-    const container = document.querySelector('.video-container');
+    const container = document.getElementById('video-container');
     const urlParams = new URLSearchParams(window.location.search);
     const manifestUri = urlParams.get('url');
 
-    function initApp() {
+    async function initApp() {
+      // Polyfills
       shaka.polyfill.installAll();
 
       if (!shaka.Player.isBrowserSupported()) {
@@ -48,34 +51,32 @@
         return;
       }
 
+      // Init player
       const player = new shaka.Player(video);
       const ui = new shaka.ui.Overlay(player, container, video);
-      const controls = ui.getControls();
 
-      // Enable quality selection
+      // Player UI config
       ui.configure({
         controlPanelElements: [
-          'play_pause', 'mute', 'volume', 'spacer', 'time_and_duration', 'overflow_menu'
+          'play_pause', 'mute', 'volume', 'seek_bar',
+          'time_and_duration', 'fullscreen', 'overflow_menu'
         ],
         overflowMenuButtons: ['quality', 'language', 'playback_rate', 'captions'],
         addBigPlayButton: true,
-        seekBarColors: {
-          base: 'gray',
-          buffered: 'lightblue',
-          played: 'cyan'
-        }
       });
 
-      player.addEventListener('error', (e) => {
-        console.error('Error:', e.detail);
-        alert(`Playback Error ${e.detail.code}`);
+      // Error handling
+      player.addEventListener('error', e => {
+        console.error('Player Error:', e.detail);
+        alert(`Playback Error: ${e.detail.code}`);
       });
 
-      player.load(manifestUri).then(() => {
-        console.log('Stream loaded');
-      }).catch((e) => {
-        console.error('Load failed', e);
-      });
+      try {
+        await player.load(manifestUri);
+        console.log('Video loaded successfully');
+      } catch (e) {
+        console.error('Load failed:', e);
+      }
     }
 
     document.addEventListener('DOMContentLoaded', initApp);
